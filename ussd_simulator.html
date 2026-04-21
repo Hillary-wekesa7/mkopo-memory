@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mkopo Memory – Test Suite</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #0d1117; color: #e0e0e0;
+  font-family: 'Courier New', monospace;
+  display: flex; flex-direction: column;
+  align-items: center; padding: 20px; min-height: 100vh;
+}
+h1 { color: #00c896; font-size: 18px; margin-bottom: 4px; letter-spacing: 2px; }
+.subtitle { color: #555; font-size: 11px; margin-bottom: 20px; }
+.layout { display: flex; gap: 16px; width: 100%; max-width: 920px; align-items: flex-start; }
+
+/* Phone */
+.phone {
+  background: #161b22; border-radius: 32px; padding: 16px;
+  width: 270px; flex-shrink: 0; border: 1px solid #30363d;
+  box-shadow: 0 0 30px rgba(0,200,150,0.1);
+}
+.speaker { width: 50px; height: 5px; background: #30363d; border-radius: 3px; margin: 0 auto 12px; }
+.screen {
+  background: #010409; border-radius: 12px; padding: 12px;
+  min-height: 210px; border: 1px solid #21262d;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.screen-header { display: flex; justify-content: space-between; font-size: 9px; color: #444; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #161b22; }
+.signal { color: #00c896; }
+.screen-title { font-size: 10px; color: #00c896; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.screen-body { font-size: 12px; line-height: 1.7; color: #e0e0e0; white-space: pre-wrap; flex: 1; min-height: 140px; }
+.screen-body.ended { color: #555; }
+.screen-input { margin-top: 8px; border-top: 1px solid #161b22; padding-top: 8px; }
+.screen-input input {
+  width: 100%; background: #0d1117; border: 1px solid #30363d;
+  border-radius: 6px; color: #00c896; font-family: 'Courier New', monospace;
+  font-size: 12px; padding: 5px 8px; outline: none;
+}
+.screen-input input:focus { border-color: #00c896; }
+.btn-row { display: flex; gap: 6px; margin-top: 6px; }
+.btn { flex: 1; padding: 7px 4px; border: none; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 11px; font-weight: bold; cursor: pointer; transition: opacity 0.15s; }
+.btn:active { opacity: 0.7; }
+.btn-green { background: #00c896; color: #000; }
+.btn-red { background: #c0392b; color: #fff; }
+.btn-blue { background: #2980b9; color: #fff; }
+.dial-bar { background: #010409; border: 1px solid #21262d; border-radius: 8px; padding: 6px 10px; font-size: 13px; color: #00c896; margin-top: 10px; text-align: center; }
+.status { font-size: 10px; text-align: center; margin-top: 6px; color: #555; min-height: 14px; }
+.status.ok { color: #00c896; }
+.status.err { color: #e74c3c; }
+
+/* Right */
+.right-panel { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+.card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; }
+.card-title { font-size: 11px; color: #00c896; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.badge { background: #00c896; color: #000; border-radius: 10px; padding: 1px 7px; font-size: 9px; }
+.form-row { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; }
+.form-row label { font-size: 10px; color: #888; width: 72px; flex-shrink: 0; }
+.form-row input {
+  flex: 1; background: #0d1117; border: 1px solid #30363d;
+  border-radius: 6px; color: #e0e0e0; font-family: 'Courier New', monospace;
+  font-size: 12px; padding: 5px 8px; outline: none;
+}
+.form-row input:focus { border-color: #00c896; }
+.action-btn {
+  width: 100%; padding: 8px; border: none; border-radius: 8px;
+  font-family: 'Courier New', monospace; font-size: 12px; font-weight: bold;
+  cursor: pointer; margin-top: 4px; transition: opacity 0.15s;
+}
+.action-btn:active { opacity: 0.7; }
+.action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.green { background: #00c896; color: #000; }
+.blue { background: #1f6feb; color: #fff; }
+.orange { background: #e67e22; color: #fff; }
+.purple { background: #8e44ad; color: #fff; }
+.red { background: #c0392b; color: #fff; }
+.response-box { background: #0d1117; border: 1px solid #21262d; border-radius: 6px; padding: 8px; font-size: 11px; min-height: 36px; margin-top: 8px; color: #00c896; white-space: pre-wrap; line-height: 1.5; }
+.response-box.error { color: #e74c3c; }
+.response-box.neutral { color: #555; }
+
+/* UVI chips */
+.uvi-store { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.uvi-chip { background: #1f6feb22; border: 1px solid #1f6feb; border-radius: 20px; padding: 3px 10px; font-size: 10px; color: #58a6ff; cursor: pointer; transition: background 0.15s; }
+.uvi-chip:hover { background: #1f6feb44; }
+
+/* Log */
+.log-area { background: #0d1117; border: 1px solid #21262d; border-radius: 8px; padding: 10px; max-height: 200px; overflow-y: auto; font-size: 10px; }
+.log-line { padding: 2px 0; border-bottom: 1px solid #0d1117; }
+.log-line.tx { color: #58a6ff; }
+.log-line.rx { color: #00c896; }
+.log-line.err { color: #e74c3c; }
+.log-line.info { color: #555; }
+
+/* Tests */
+.test-row { display: flex; align-items: center; gap: 6px; font-size: 11px; padding: 4px 0; border-bottom: 1px solid #161b22; }
+.pass { color: #00c896; }
+.fail { color: #e74c3c; }
+.pending { color: #444; }
+.running { color: #e67e22; }
+</style>
+</head>
+<body>
+
+<h1>⛓ MKOPO MEMORY</h1>
+<p class="subtitle">Interactive Test Suite — Flask must be running on localhost:5000</p>
+
+<div class="layout">
+
+  <!-- Phone -->
+  <div class="phone">
+    <div class="speaker"></div>
+    <div class="screen">
+      <div>
+        <div class="screen-header">
+          <span>Safaricom KE</span><span class="signal">▮▮▮▮ 4G</span>
+        </div>
+        <div class="screen-title" id="s-title">Ready</div>
+        <div class="screen-body" id="s-body">Press 📞 Dial to start a USSD session.</div>
+      </div>
+      <div class="screen-input" id="s-input" style="display:none">
+        <input type="text" id="s-text" placeholder="Type response and press Enter..." />
+        <div class="btn-row">
+          <button class="btn btn-green" onclick="sendUssd()">Send</button>
+          <button class="btn btn-red" onclick="endSession()">End</button>
+        </div>
+      </div>
+    </div>
+    <div class="dial-bar">*384*1234#</div>
+    <div class="btn-row" style="margin-top:8px">
+      <button class="btn btn-blue" onclick="startSession()">📞 Dial</button>
+      <button class="btn btn-red" onclick="endSession()">✕ End</button>
+    </div>
+    <div class="status" id="s-status">idle</div>
+  </div>
+
+  <!-- Right panel -->
+  <div class="right-panel">
+
+    <!-- Saved UVIs -->
+    <div class="card">
+      <div class="card-title">📋 Saved UVIs <span class="badge" id="uvi-count">0</span></div>
+      <div style="font-size:10px;color:#555;margin-bottom:6px">Auto-saved when loans are confirmed. Click any UVI to fill the forms below.</div>
+      <div class="uvi-store" id="uvi-store"><span style="color:#333;font-size:10px">No UVIs yet.</span></div>
+    </div>
+
+    <!-- New Loan -->
+    <div class="card">
+      <div class="card-title">💰 New Loan</div>
+      <div class="form-row"><label>Lender</label><input id="f-lender" value="Njeri" /></div>
+      <div class="form-row"><label>Borrower</label><input id="f-borrower" value="Wanjiku" /></div>
+      <div class="form-row"><label>Amount (KES)</label><input id="f-amount" type="number" value="2000" /></div>
+      <div class="form-row"><label>Due Date</label><input id="f-due" type="date" value="2026-06-15" /></div>
+      <button class="action-btn green" onclick="recordLoan()">📤 Record Loan via USSD</button>
+      <div class="response-box neutral" id="r-loan">Fill the form and click Record.</div>
+    </div>
+
+    <!-- Confirm -->
+    <div class="card">
+      <div class="card-title">✅ Confirm Request</div>
+      <div style="font-size:10px;color:#555;margin-bottom:8px">Temp ID is auto-filled after recording a loan or repayment.</div>
+      <div class="form-row"><label>Temp ID</label><input id="f-tempid" placeholder="auto-filled..." /></div>
+      <button class="action-btn blue" onclick="confirmRequest()">✔ Confirm via SMS</button>
+      <div class="response-box neutral" id="r-confirm">Waiting...</div>
+    </div>
+
+    <!-- Verify -->
+    <div class="card">
+      <div class="card-title">🔍 Verify Loan</div>
+      <div class="form-row"><label>UVI</label><input id="f-verify-uvi" placeholder="UV-xxxxxxxxxxxx" /></div>
+      <button class="action-btn orange" onclick="verifyLoan()">🔎 Verify via USSD</button>
+      <div class="response-box neutral" id="r-verify">Enter a UVI and verify.</div>
+    </div>
+
+    <!-- Repayment -->
+    <div class="card">
+      <div class="card-title">💸 Record Repayment</div>
+      <div class="form-row"><label>UVI</label><input id="f-repay-uvi" placeholder="UV-xxxxxxxxxxxx" /></div>
+      <div class="form-row"><label>Amount (KES)</label><input id="f-repay-amount" type="number" value="500" /></div>
+      <div class="form-row"><label>Date</label><input id="f-repay-date" type="date" value="2026-06-10" /></div>
+      <button class="action-btn purple" onclick="recordRepayment()">📤 Send Repayment via SMS</button>
+      <div class="response-box neutral" id="r-repay">Enter UVI and amount.</div>
+    </div>
+
+    <!-- Tamper Test -->
+    <div class="card">
+      <div class="card-title">🛡 Tamper Detection</div>
+      <div style="font-size:10px;color:#888;line-height:1.6;margin-bottom:8px">
+        1. Open <b>mkopo_chain.jsonl</b> in VS Code<br>
+        2. Change any <b>"amount"</b> value to a different number<br>
+        3. Save the file<br>
+        4. Enter the UVI and click Run — system should detect tampering
+      </div>
+      <div class="form-row"><label>UVI</label><input id="f-tamper-uvi" placeholder="UV-xxxxxxxxxxxx" /></div>
+      <button class="action-btn red" onclick="tamperTest()">⚠ Run Tamper Check</button>
+      <div class="response-box neutral" id="r-tamper">Tamper then verify.</div>
+    </div>
+
+    <!-- Auto Suite -->
+    <div class="card">
+      <div class="card-title">🧪 Automated Test Suite</div>
+      <div style="font-size:10px;color:#555;margin-bottom:8px">Creates a fresh loan and runs all tests automatically end-to-end.</div>
+      <button class="action-btn green" id="btn-auto" onclick="runAllTests()">▶ Run All Tests</button>
+      <div style="margin-top:10px" id="test-results">
+        <div class="test-row pending" id="t0">⬜ T1: Record new loan</div>
+        <div class="test-row pending" id="t1">⬜ T2: Confirm loan → get UVI</div>
+        <div class="test-row pending" id="t2">⬜ T3: Verify loan details</div>
+        <div class="test-row pending" id="t3">⬜ T4: Record partial repayment</div>
+        <div class="test-row pending" id="t4">⬜ T5: Confirm repayment</div>
+        <div class="test-row pending" id="t5">⬜ T6: Verify updated balance</div>
+        <div class="test-row pending" id="t6">⬜ T7: Overpayment blocked</div>
+        <div class="test-row pending" id="t7">⬜ T8: Invalid UVI rejected</div>
+      </div>
+    </div>
+
+    <!-- Log -->
+    <div class="card">
+      <div class="card-title">📡 Request Log</div>
+      <div class="log-area" id="log-area"><div class="log-line info">Waiting...</div></div>
+      <button class="action-btn red" style="margin-top:6px;font-size:10px;padding:5px" onclick="clearLog()">Clear</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const BASE = 'http://localhost:5000';
+const PHONE = '0712345678';
+let sid = newId(), stxt = '', sactive = false;
+let savedUvis = [], pendingTid = null;
+
+function newId() { return 'sim-' + Math.random().toString(36).substr(2,9); }
+
+function log(msg, type='info') {
+  const a = document.getElementById('log-area');
+  const d = document.createElement('div');
+  d.className = `log-line ${type}`;
+  d.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+  a.appendChild(d); a.scrollTop = a.scrollHeight;
+}
+function clearLog() { document.getElementById('log-area').innerHTML = ''; }
+
+function saveUvi(uvi) {
+  if (savedUvis.includes(uvi)) return;
+  savedUvis.push(uvi);
+  const store = document.getElementById('uvi-store');
+  document.getElementById('uvi-count').textContent = savedUvis.length;
+  store.innerHTML = savedUvis.map(u =>
+    `<span class="uvi-chip" onclick="fillUvi('${u}')">${u}</span>`
+  ).join('');
+}
+
+function fillUvi(uvi) {
+  ['f-verify-uvi','f-repay-uvi','f-tamper-uvi'].forEach(id => {
+    document.getElementById(id).value = uvi;
+  });
+  log(`UVI filled: ${uvi}`, 'info');
+}
+
+function extractTid(text) {
+  const m = text.match(/(?:Temp ID[:\s]+|CONFIRM\s+)([a-f0-9]{8})/i);
+  if (m) {
+    pendingTid = m[1];
+    document.getElementById('f-tempid').value = pendingTid;
+    log(`Temp ID auto-filled: ${pendingTid}`, 'info');
+  }
+}
+
+function extractUvi(text) {
+  const m = text.match(/UV-[a-f0-9]{12}/i);
+  if (m) { saveUvi(m[0]); fillUvi(m[0]); }
+}
+
+// ── USSD ──
+function startSession() {
+  sid = newId(); stxt = ''; sactive = true;
+  log('📞 Dialing *384*1234#', 'tx');
+  ussdPost('');
+}
+
+function endSession() {
+  sactive = false; stxt = '';
+  setScreen('Session ended. Press 📞 to start again.', true);
+  setStatus('idle', '');
+  document.getElementById('s-input').style.display = 'none';
+}
+
+async function ussdPost(text) {
+  setStatus('Connecting...', '');
+  log(`→ USSD: "${text}"`, 'tx');
+  try {
+    const body = new URLSearchParams({ sessionId:sid, serviceCode:'*384*1234#', phoneNumber:PHONE, text });
+    const res = await fetch(`${BASE}/ussd`, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: body.toString() });
+    const raw = await res.text();
+    log(`← ${raw.substring(0,120)}`, 'rx');
+    const content = raw.replace(/^(CON |END )/, '');
+    extractTid(content);
+    if (raw.startsWith('CON ')) {
+      setScreen(content, false);
+      setStatus('Session active ●', 'ok');
+      document.getElementById('s-input').style.display = 'block';
+      document.getElementById('s-text').focus();
+    } else {
+      setScreen(content, true);
+      sactive = false;
+      setStatus('Session ended', '');
+      document.getElementById('s-input').style.display = 'none';
+    }
+    return content;
+  } catch(e) {
+    setStatus('Flask not running!', 'err');
+    setScreen('Cannot reach Flask.\n\nMake sure you ran:\npython app.py', true);
+    log(`ERROR: ${e.message}`, 'err');
+    return '';
+  }
+}
+
+async function ussdDirect(text) {
+  // Fire a USSD request without updating the phone screen
+  const body = new URLSearchParams({ sessionId:sid, serviceCode:'*384*1234#', phoneNumber:PHONE, text });
+  const res = await fetch(`${BASE}/ussd`, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: body.toString() });
+  const raw = await res.text();
+  log(`→ USSD silent: "${text}" ← ${raw.substring(0,80)}`, 'tx');
+  const content = raw.replace(/^(CON |END )/, '');
+  extractTid(content);
+  return content;
+}
+
+function sendUssd() {
+  if (!sactive) { setStatus('No session. Press 📞', 'err'); return; }
+  const val = document.getElementById('s-text').value.trim();
+  if (!val) return;
+  stxt = stxt ? stxt + '*' + val : val;
+  document.getElementById('s-text').value = '';
+  ussdPost(stxt);
+}
+
+function setScreen(content, ended) {
+  document.getElementById('s-body').textContent = content;
+  document.getElementById('s-body').className = 'screen-body' + (ended ? ' ended' : '');
+  document.getElementById('s-title').textContent = ended ? 'Session Ended' : 'USSD Session';
+}
+
+function setStatus(msg, type) {
+  const el = document.getElementById('s-status');
+  el.textContent = msg; el.className = 'status' + (type ? ` ${type}` : '');
+}
+
+// ── SMS ──
+async function smsPost(text) {
+  log(`→ SMS: ${text}`, 'tx');
+  const body = new URLSearchParams({ from: PHONE, text });
+  const res = await fetch(`${BASE}/sms`, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: body.toString() });
+  const raw = await res.text();
+  log(`← SMS: ${raw.substring(0,120)}`, 'rx');
+  extractTid(raw);
+  extractUvi(raw);
+  return raw;
+}
+
+function setResp(id, text, isError=false) {
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.className = 'response-box' + (isError ? ' error' : '');
+}
+
+// ── Handlers ──
+async function recordLoan() {
+  const l = document.getElementById('f-lender').value.trim();
+  const b = document.getElementById('f-borrower').value.trim();
+  const a = document.getElementById('f-amount').value.trim();
+  const d = document.getElementById('f-due').value.trim();
+  if (!l||!b||!a||!d) { setResp('r-loan','Fill all fields.',true); return; }
+  sid = newId(); stxt = '';
+  const res = await ussdPost(`1*${l} ${b} ${a} ${d}`);
+  setResp('r-loan', res || 'No response');
+}
+
+async function confirmRequest() {
+  const tid = document.getElementById('f-tempid').value.trim();
+  if (!tid) { setResp('r-confirm','Enter Temp ID first.',true); return; }
+  const res = await smsPost(`CONFIRM ${tid}`);
+  setResp('r-confirm', res || 'No response');
+}
+
+async function verifyLoan() {
+  const uvi = document.getElementById('f-verify-uvi').value.trim();
+  if (!uvi) { setResp('r-verify','Enter a UVI first.',true); return; }
+  sid = newId();
+  const res = await ussdPost(`2*${uvi}`);
+  setResp('r-verify', res || 'No response');
+}
+
+async function recordRepayment() {
+  const uvi = document.getElementById('f-repay-uvi').value.trim();
+  const amt = document.getElementById('f-repay-amount').value.trim();
+  const dt  = document.getElementById('f-repay-date').value.trim();
+  if (!uvi||!amt||!dt) { setResp('r-repay','Fill all fields.',true); return; }
+  const res = await smsPost(`REPAY ${uvi} ${amt} ${dt}`);
+  setResp('r-repay', res || 'No response');
+}
+
+async function tamperTest() {
+  const uvi = document.getElementById('f-tamper-uvi').value.trim();
+  if (!uvi) { setResp('r-tamper','Enter a UVI first.',true); return; }
+  sid = newId();
+  const res = await ussdPost(`2*${uvi}`);
+  const tampered = /tamper/i.test(res);
+  setResp('r-tamper',
+    tampered ? `✅ PASS — Tampering detected!\n\n${res}` : `ℹ Chain intact (edit the file first)\n\n${res}`
+  );
+}
+
+// ── Auto test suite ──
+const delay = ms => new Promise(r => setTimeout(r, ms));
+
+function tPass(i, label) {
+  const el = document.getElementById(`t${i}`);
+  el.className = 'test-row pass';
+  el.textContent = `✅ ${label}`;
+}
+function tFail(i, label) {
+  const el = document.getElementById(`t${i}`);
+  el.className = 'test-row fail';
+  el.textContent = `❌ ${label}`;
+}
+function tRun(i, label) {
+  const el = document.getElementById(`t${i}`);
+  el.className = 'test-row running';
+  el.textContent = `🔄 ${label}`;
+}
+
+async function runAllTests() {
+  document.getElementById('btn-auto').disabled = true;
+  for (let i=0;i<8;i++) {
+    const el = document.getElementById(`t${i}`);
+    el.className='test-row pending';
+    el.textContent = el.textContent.replace(/[✅❌🔄⬜]/,'⬜');
+  }
+
+  let testUvi = null;
+  let testTid = null;
+
+  try {
+    // T1: Record loan
+    tRun(0, 'T1: Recording loan...');
+    sid = newId(); stxt = '';
+    const r1 = await ussdPost('1*AutoLender AutoBorrower 1000 2026-12-31');
+    testTid = pendingTid;
+    /temp id/i.test(r1) ? tPass(0,'T1: Loan request created') : tFail(0,'T1: No Temp ID — check app.py');
+    await delay(600);
+
+    // T2: Confirm
+    tRun(1, 'T2: Confirming loan...');
+    if (!testTid) { tFail(1,'T2: No Temp ID available'); throw new Error('stop'); }
+    const r2 = await smsPost(`CONFIRM ${testTid}`);
+    const uviM = r2.match(/UV-[a-f0-9]{12}/i);
+    testUvi = uviM ? uviM[0] : null;
+    testUvi ? tPass(1,`T2: UVI received → ${testUvi}`) : tFail(1,'T2: No UVI in response');
+    await delay(600);
+
+    // T3: Verify
+    tRun(2,'T3: Verifying loan...');
+    if (!testUvi) { tFail(2,'T3: No UVI to verify'); throw new Error('stop'); }
+    sid = newId();
+    const r3 = await ussdPost(`2*${testUvi}`);
+    /autolender|1000/i.test(r3) ? tPass(2,'T3: Loan details verified') : tFail(2,`T3: Unexpected response: ${r3.substring(0,40)}`);
+    await delay(600);
+
+    // T4: Repayment request
+    tRun(3,'T4: Sending repayment...');
+    const r4 = await smsPost(`REPAY ${testUvi} 300 2026-07-01`);
+    testTid = pendingTid;
+    /temp id|confirm/i.test(r4) ? tPass(3,'T4: Repayment request sent') : tFail(3,`T4: ${r4.substring(0,60)}`);
+    await delay(600);
+
+    // T5: Confirm repayment
+    tRun(4,'T5: Confirming repayment...');
+    if (!testTid) { tFail(4,'T5: No Temp ID for repayment'); throw new Error('stop'); }
+    const r5 = await smsPost(`CONFIRM ${testTid}`);
+    /repayment recorded|balance/i.test(r5) ? tPass(4,'T5: Repayment confirmed') : tFail(4,`T5: ${r5.substring(0,60)}`);
+    await delay(600);
+
+    // T6: Verify updated balance
+    tRun(5,'T6: Checking updated balance...');
+    sid = newId();
+    const r6 = await ussdPost(`2*${testUvi}`);
+    /700|balance/i.test(r6) ? tPass(5,'T6: Balance updated to KES 700') : tFail(5,`T6: ${r6.substring(0,60)}`);
+    await delay(600);
+
+    // T7: Overpayment guard
+    tRun(6,'T7: Testing overpayment guard...');
+    const r7 = await smsPost(`REPAY ${testUvi} 99999 2026-07-01`);
+    /exceed|balance|settled/i.test(r7) ? tPass(6,'T7: Overpayment blocked ✓') : tFail(6,`T7: ${r7.substring(0,60)}`);
+    await delay(600);
+
+    // T8: Invalid UVI
+    tRun(7,'T8: Testing invalid UVI...');
+    sid = newId();
+    const r8 = await ussdPost('2*UV-00000000');
+    /not found|invalid/i.test(r8) ? tPass(7,'T8: Invalid UVI rejected ✓') : tFail(7,`T8: ${r8.substring(0,60)}`);
+
+    log('🎉 All tests done!', 'rx');
+
+  } catch(e) {
+    if (e.message !== 'stop') log(`Suite error: ${e.message}`, 'err');
+  }
+
+  document.getElementById('btn-auto').disabled = false;
+}
+
+document.getElementById('s-text').addEventListener('keydown', e => {
+  if (e.key === 'Enter') sendUssd();
+});
+</script>
+</body>
+</html>

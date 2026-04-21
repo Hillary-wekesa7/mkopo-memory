@@ -1,0 +1,45 @@
+### Test USSD - Main menu
+POST http://localhost:5000/ussd
+Content-Type: application/x-www-form-urlencoded
+
+sessionId=test123&serviceCode=*384*1234%23&phoneNumber=0712345678&text=
+
+###
+
+### Test USSD - New loan (step 1)
+POST http://localhost:5000/ussd
+Content-Type: application/x-www-form-urlencoded
+
+sessionId=test123&serviceCode=*384*1234%23&phoneNumber=0712345678&text=1
+
+###
+
+### Test USSD - New loan (step 2 - entering details)
+POST http://localhost:5000/ussd
+Content-Type: application/x-www-form-urlencoded
+
+sessionId=test123&serviceCode=*384*1234%23&phoneNumber=0712345678&text=1*Njeri Wanjiku 2000 2026-06-15
+
+###
+
+### Test SMS - Create loan
+POST http://localhost:5000/sms
+Content-Type: application/x-www-form-urlencoded
+
+from=0712345678&text=LOAN Njeri Wanjiku 2000 2026-06-15
+
+###
+
+### Test SMS - Confirm (replace TEMPID with actual)
+POST http://localhost:5000/sms
+Content-Type: application/x-www-form-urlencoded
+
+from=0712345678&text=CONFIRM abc12345
+
+###
+
+### Test SMS - Verify (replace UVI with actual)
+POST http://localhost:5000/sms
+Content-Type: application/x-www-form-urlencoded
+
+from=0712345678&text=VERIFY UV-a3f2c9d8e4f2

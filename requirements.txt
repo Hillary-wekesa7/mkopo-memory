@@ -1,0 +1,4 @@
+flask
+requests
+africastalking
+python-dotenv

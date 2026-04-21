@@ -1,0 +1,47 @@
+{
+  "UV-d0c92aff73a9": {
+    "file_offset": 0,
+    "record_hash": "d0c92aff8cf225b1fa5ed902803ef6323fd335039cf493c98de6650b0353c711",
+    "type": "loan"
+  },
+  "UV-f54c27bf2f87": {
+    "file_offset": 308,
+    "record_hash": "f54c27bf00d508c19b168b20b12751ec9a1e8a4497b114708f97da2ebdf49919",
+    "type": "loan"
+  },
+  "RP-ff03b8b19283": {
+    "file_offset": 672,
+    "record_hash": "ff03b8b1d55dba148696ca5d7cafd79fb10b05f5415874b22bedd0d83babd348",
+    "type": "repayment"
+  },
+  "UV-3b7339eff0f4": {
+    "file_offset": 998,
+    "record_hash": "3b7339efd506871529a74faa41031fe5ff0f899de2462ba887ca932888b66ae1",
+    "type": "loan"
+  },
+  "UV-34014e61e6df": {
+    "file_offset": 1362,
+    "record_hash": "34014e61355422ffd783c4c0a57511f4c04a1ca19e091e215874b25b441c723b",
+    "type": "loan"
+  },
+  "UV-45ee77ac4e98": {
+    "file_offset": 1736,
+    "record_hash": "45ee77acbb1868a1c85320ca348bb9741f3ffeeb8de763759d91ae2c9e2263ea",
+    "type": "loan"
+  },
+  "UV-0a1478128a44": {
+    "file_offset": 2110,
+    "record_hash": "0a14781213bed5e81524f8970f17c15ee588727490ddabd51cc3681af889c90e",
+    "type": "loan"
+  },
+  "UV-0f5833df5dde": {
+    "file_offset": 2484,
+    "record_hash": "0f5833df00859e0082dd55cfd11a14b245170b80e2d864aae5d4954b7c726adc",
+    "type": "loan"
+  },
+  "RP-5f8163b6f884": {
+    "file_offset": 2858,
+    "record_hash": "5f8163b6160f26c1e105fa8a6ba2814ef4821253eee0bac4a6d3e4af85f0710c",
+    "type": "repayment"
+  }
+}

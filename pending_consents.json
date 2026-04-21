@@ -1,0 +1,106 @@
+{
+  "d8493b31": {
+    "type": "repayment",
+    "lender_phone": "+254712345678",
+    "borrower_phone": "+254712345678",
+    "payload": {
+      "original_uvi": "UV-3b7339eff0f4",
+      "amount_repaid": 90000.0,
+      "date_repaid": "2026-06-10",
+      "new_balance": 0
+    },
+    "confirmations": [],
+    "created_at": 1776537385
+  },
+  "b410605c": {
+    "type": "repayment",
+    "lender_phone": "+254712345678",
+    "borrower_phone": "+254712345678",
+    "payload": {
+      "original_uvi": "UV-34014e61e6df",
+      "amount_repaid": 300.0,
+      "date_repaid": "2026-07-01",
+      "new_balance": 700.0
+    },
+    "confirmations": [],
+    "created_at": 1776537409
+  },
+  "b97ce30c": {
+    "type": "repayment",
+    "lender_phone": "+254712345678",
+    "borrower_phone": "+254712345678",
+    "payload": {
+      "original_uvi": "UV-34014e61e6df",
+      "amount_repaid": 99999.0,
+      "date_repaid": "2026-07-01",
+      "new_balance": 0
+    },
+    "confirmations": [],
+    "created_at": 1776537415
+  },
+  "8f38d346": {
+    "type": "repayment",
+    "lender_phone": "+254712345678",
+    "borrower_phone": "+254712345678",
+    "payload": {
+      "original_uvi": "UV-34014e61e6df",
+      "amount_repaid": 600.0,
+      "date_repaid": "2026-06-10",
+      "new_balance": 400.0
+    },
+    "confirmations": [],
+    "created_at": 1776537449
+  },
+  "feecdbcd": {
+    "type": "repayment",
+    "lender_phone": "+254712345678",
+    "borrower_phone": "+254712345678",
+    "payload": {
+      "original_uvi": "UV-45ee77ac4e98",
+      "amount_repaid": 300.0,
+      "date_repaid": "2026-07-01",
+      "new_balance": 700.0
+    },
+    "confirmations": [],
+    "created_at": 1776537461
+  },
+  "a821a05a": {
+    "type": "repayment",
+    "lender_phone": "+254712345678",
+    "borrower_phone": "+254712345678",
+    "payload": {
+      "original_uvi": "UV-45ee77ac4e98",
+      "amount_repaid": 99999.0,
+      "date_repaid": "2026-07-01",
+      "new_balance": 0
+    },
+    "confirmations": [],
+    "created_at": 1776537466
+  },
+  "b337425b": {
+    "type": "repayment",
+    "lender_phone": "+254712345678",
+    "borrower_phone": "+254712345678",
+    "payload": {
+      "original_uvi": "UV-0a1478128a44",
+      "amount_repaid": 300.0,
+      "date_repaid": "2026-07-01",
+      "new_balance": 700.0
+    },
+    "confirmations": [],
+    "created_at": 1776538048
+  },
+  "053b30c0": {
+    "type": "repayment",
+    "lender_phone": "+254712345678",
+    "borrower_phone": "+254712345678",
+    "payload": {
+      "original_uvi": "UV-0a1478128a44",
+      "amount_repaid": 99999.0,
+      "date_repaid": "2026-07-01",
+      "new_balance": 0
+    },
+    "confirmations": [],
+    "created_at": 1776538054
+  }
+}
